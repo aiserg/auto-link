@@ -1,5 +1,5 @@
 # Auto-link
-Auto-link is an npm package that replaces URLs in text with HTML links, ignore the URLs within a href/pre tag.
+Auto-link is an npm package that replaces URLs and emails in text with HTML links, ignore the URLs within a href/pre tag.
 
 
 ## Installation

@@ -25,27 +25,38 @@ AutoLink.link = function(html, option) {
       }
     });
 
-    var replaceURLWithHTMLLinks = function(text) {
-        if (text) {
-            text = text.replace(
-                /((https?\:\/\/)|(www\.))(\S+)(\w{2,4})(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi,
-                function(url){
-                    var full_url = url;
-                    if (!full_url.match('^https?:\/\/')) {
-                        full_url = 'http://' + full_url;
-                    }
-                    var link = cheerio('<a href="' + full_url + '">' + url + '</a>');
-                    _.forEach(option.attrs, function(value, name) {
-                        link.attr(name, value);
-                    });
-                    if (option.target && _.isString(option.target)) {
-                        link.attr('target', option.target);
-                    }
-                    return $.html(link);
+    var replaceURLAndEmailsWithHTMLLinks = function(text) {
+        if (!text) return text
+        textWithEmails = text.replace(
+            /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gm,
+            function(url){
+                var full_url = url;
+                var link = cheerio('<a href="mailto:' + full_url + '">' + url + '</a>');
+                _.forEach(option.attrs, function(value, name) {
+                    link.attr(name, value);
+                });
+                return $.html(link);
+            }
+        );
+
+        textWithEmailsAndLinks = textWithEmails.replace(
+            /((https?\:\/\/)|(www\.))(\S+)(\w{2,4})(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi,
+            function(url){
+                var full_url = url;
+                if (!full_url.match('^https?:\/\/')) {
+                    full_url = 'http://' + full_url;
                 }
-            );
-        }
-        return text;
+                var link = cheerio('<a href="' + full_url + '">' + url + '</a>');
+                _.forEach(option.attrs, function(value, name) {
+                    link.attr(name, value);
+                });
+                if (option.target && _.isString(option.target)) {
+                    link.attr('target', option.target);
+                }
+                return $.html(link);
+            }
+        );
+        return textWithEmailsAndLinks
     };
 
     var noLink = function(ele) {
