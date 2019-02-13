@@ -1,6 +1,6 @@
 {
   "name": "aiserg-auto-link",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Replace URLs and emails in text with HTML links, ignore the URLs within a href/pre tag.",
   "main": "index.js",
   "scripts": {
